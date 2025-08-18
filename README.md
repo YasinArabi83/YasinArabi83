@@ -1,5 +1,5 @@
 # 💫 About Me:
-Hello, world! 🌍<br><br>I'm a passionate and enthusiastic developer with a knack for building web applications. My main programming language is C#, and I have strong expertise in ASP.NET. I'm constantly seeking to improve my skills and currently enhancing my knowledge in JavaScript and SQL Server.<br><br>Here are some of the technologies I work with:<br><br>C#<br><br>ASP.NET (actively learning)<br><br>HTML & CSS (proficient)<br><br>JavaScript (in progress)<br><br>SQL Server (in progress)<br><br>Python & Django (basic knowledge)<br><br>I enjoy tackling new challenges and am always eager to learn more. Let's connect and create amazing things together!
+Hello, world! 🌍<br><br>I'm a passionate and enthusiastic developer with a knack for building web applications. My main programming language is C#, and I have strong expertise in ASP.NET. I'm constantly seeking to improve my skills and currently enhancing my knowledge in JavaScript and SQL Server.<br><br>Here are some of the technologies I work with:<br><br>C#<br><br>ASP.NET (actively learning)<br><br>HTML & CSS (proficient)<br><br>JavaScript (actively learning)<br><br>SQL Server (actively learning)<br><br>Python & Django (basic knowledge)<br><br>I enjoy tackling new challenges and am always eager to learn more. Let's connect and create amazing things together!
 
 
 ## 🌐 Socials:
