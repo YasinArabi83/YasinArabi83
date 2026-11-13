@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>یاسین عربی | برنامه‌نویس .NET — توسعه سامانه‌های سازمانی</title>
+  <meta name="description" content="رزومه تعاملی یاسین عربی؛ برنامه‌نویس .NET با تمرکز بر توسعه سامانه‌های سازمانی (ERP)، مهاجرت پلتفرم به .NET 10، معماری DDD و Modular Monolith.">
+  <meta name="theme-color" content="#070a14">
+  <meta property="og:title" content="یاسین عربی | برنامه‌نویس .NET">
+  <meta property="og:description" content="توسعه سامانه‌های سازمانی (ERP) — مهاجرت .NET، معماری DDD و ابزارهای هوش مصنوعی در توسعه نرم‌افزار.">
+  <meta property="og:type" content="profile">
+  <meta property="og:locale" content="fa_IR">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='14' width='38' height='38' rx='6' fill='none' stroke='url(%23g)' stroke-width='4' transform='rotate(-12 27 33)'/%3E%3Crect x='22' y='8' width='34' height='34' rx='6' fill='none' stroke='url(%23g)' stroke-width='4' transform='rotate(14 39 25)'/%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "یاسین عربی",
+    "jobTitle": "برنامه‌نویس .NET — توسعه سامانه‌های سازمانی",
+    "email": "yasinarabi1383@gmail.com",
+    "telephone": "+989112198417",
+    "address": { "@type": "PostalAddress", "addressLocality": "فردیس، کرج", "addressCountry": "IR" },
+    "sameAs": [
+      "https://github.com/YasinArabi83",
+      "https://www.linkedin.com/in/yasinarabi83"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#about">پرش به محتوای اصلی</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressBar"></span></div>
+  <canvas id="spaceCanvas" class="space-canvas" aria-hidden="true"></canvas>
+
+  <!-- ============ هدر و ناوبری ============ -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="بازگشت به بالای صفحه">
+        <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+          <rect x="8" y="14" width="38" height="38" rx="6" fill="none" stroke="url(#brandGrad)" stroke-width="4" transform="rotate(-12 27 33)"/>
+          <rect x="22" y="8" width="34" height="34" rx="6" fill="none" stroke="url(#brandGrad)" stroke-width="4" transform="rotate(14 39 25)"/>
+        </svg>
+        <span class="brand-name">یاسین عربی</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="باز و بسته کردن منوی ناوبری">
+        <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="mainNav" class="main-nav" aria-label="ناوبری اصلی">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#about">درباره</a></li>
+          <li><a class="nav-link" href="#experience">تجربه کاری</a></li>
+          <li><a class="nav-link" href="#skills">مهارت‌ها</a></li>
+          <li><a class="nav-link" href="#projects">پروژه‌ها</a></li>
+          <li><a class="nav-link" href="#education">تحصیلات</a></li>
+          <li><a class="nav-link" href="#contact">تماس</a></li>
+        </ul>
+        <a class="btn btn-outline btn-sm nav-cta" href="assets/resume-yasin-arabi.pdf" download>
+          <span aria-hidden="true">⬇</span> دانلود رزومه PDF
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ بخش قهرمان (Hero) با صحنه سه‌بعدی ============ -->
+    <section class="hero" id="home" aria-label="معرفی">
+      <div class="hero-aurora" aria-hidden="true"></div>
+      <div class="grid-floor" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-kicker reveal"><span class="dot"></span> در دسترس برای فرصت‌های <bdi>Tech Lead</bdi></p>
+          <h1 class="hero-title reveal" style="--d:.08s">
+            یاسین <span class="grad-text">عربی</span>
+          </h1>
+          <p class="hero-role reveal" style="--d:.16s">برنامه‌نویس <bdi>.NET</bdi> — توسعه سامانه‌های سازمانی <bdi>(ERP)</bdi></p>
+          <p class="hero-taglines reveal" style="--d:.24s" aria-live="polite">
+            <span class="tagline is-active">مهاجرت پلتفرم از <bdi>.NET Framework 4.8</bdi> به <bdi>.NET 10</bdi></span>
+            <span class="tagline">معماری <bdi>Modular Monolith</bdi> و <bdi>DDD</bdi></span>
+            <span class="tagline">استانداردسازی ابزارهای هوش مصنوعی در تیم توسعه</span>
+          </p>
+          <p class="hero-summary reveal" style="--d:.32s">
+            بیش از یک سال تجربه تمام‌وقت در شرکت راهکارهای نرم‌افزاری پارسان؛ مالکیت کامل زیرسیستم‌های سازمانی
+            از تحلیل نیازمندی تا تحویل، مسئولیت فنی تیم دو نفره و مشارکت در تصمیم‌گیری‌های معماری.
+          </p>
+          <div class="hero-actions reveal" style="--d:.4s">
+            <a class="btn btn-primary" href="assets/resume-yasin-arabi.pdf" download>
+              <span aria-hidden="true">⬇</span> دانلود رزومه (PDF)
+            </a>
+            <a class="btn btn-outline" href="#projects">مشاهده پروژه‌ها</a>
+          </div>
+          <ul class="hero-meta reveal" style="--d:.48s">
+            <li>
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 11.5 7.4 11.9.4.3.9.3 1.2 0C13 21.5 20 15.4 20 10c0-4.4-3.6-8-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+              فردیس، کرج
+            </li>
+            <li>
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+              <a href="mailto:yasinarabi1383@gmail.com"><span dir="ltr">yasinarabi1383@gmail.com</span></a>
+            </li>
+            <li>
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1l-2.3 2.3Z"/></svg>
+              <a href="tel:+989112198417">۰۹۱۱۲۱۹۸۴۱۷</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero-scene" aria-hidden="true">
+          <div class="scene" id="heroScene">
+            <div class="orbit orbit-a"><span class="orbit-chip">C#</span></div>
+            <div class="orbit orbit-b"><span class="orbit-chip">SQL</span></div>
+            <div class="orbit orbit-c"><span class="orbit-chip">DDD</span></div>
+            <div class="orbit orbit-d"><span class="orbit-chip">AI</span></div>
+            <div class="cube-stage" id="cubeStage">
+              <div class="cube" id="heroCube" role="img" aria-label="مکعب چرخان مهارت‌ها">
+                <figure class="cube-face cube-front"><bdi>C#</bdi><small>زبان اصلی</small></figure>
+                <figure class="cube-face cube-back"><bdi>.NET 10</bdi><small>پلتفرم</small></figure>
+                <figure class="cube-face cube-right"><bdi>ERP</bdi><small>سامانه سازمانی</small></figure>
+                <figure class="cube-face cube-left"><bdi>DDD</bdi><small>معماری</small></figure>
+                <figure class="cube-face cube-top"><bdi>SQL</bdi><small>داده</small></figure>
+                <figure class="cube-face cube-bottom"><bdi>AI</bdi><small>دستیار کدنویسی</small></figure>
+              </div>
+              <div class="cube-shadow"></div>
+            </div>
+            <p class="cube-hint">مکعب را با ماوس یا لمس بچرخانید</p>
+          </div>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#about" aria-label="اسکرول به بخش درباره من">
+        <span class="scroll-cue-mouse"><span class="scroll-cue-wheel"></span></span>
+      </a>
+    </section>
+
+    <!-- ============ درباره من ============ -->
+    <section class="section" id="about" aria-labelledby="aboutTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۱</span>
+          <h2 class="section-title" id="aboutTitle">درباره من</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="about-grid">
+          <div class="about-text reveal">
+            <p>
+              برنامه‌نویس <bdi>.NET</bdi> با تمرکز بر توسعه سامانه‌های سازمانی <bdi>(ERP)</bdi> و بیش از یک سال سابقه کار
+              تمام‌وقت در شرکت راهکارهای نرم‌افزاری پارسان. تجربه مالکیت کامل زیرسیستم‌های سازمانی از تحلیل نیازمندی
+              تا تحویل، مسئولیت فنی یک تیم دو نفره در پروژه بازطراحی ماژول تردد، منتورینگ نیروی کارآموز و مشارکت در
+              تصمیم‌گیری‌های معماری پروژه مهاجرت پلتفرم از <bdi>.NET Framework 4.8</bdi> به <bdi>.NET 10</bdi> در ۱۱ ماژول سازمانی.
+            </p>
+            <p>
+              پیشگام معرفی و استانداردسازی ابزارهای هوش مصنوعی در تیم توسعه؛ از ارزیابی و راه‌اندازی دستیارهای
+              کدنویسی تا طراحی ساختار سلسله‌مراتبی فایل‌های <bdi>context</bdi> و تدوین قانون بازبینی انسانی اجباری
+              برای ماژول‌های مالی. به دنبال نقشی با مسئولیت هدایت فنی و رشد در مسیر <bdi>Tech Lead</bdi>.
+            </p>
+          </div>
+          <ul class="stats" role="list">
+            <li class="stat-card reveal" style="--d:.05s" data-tilt>
+              <span class="stat-value">+۱<small>سال</small></span>
+              <span class="stat-label">تجربه تمام‌وقت توسعه <bdi>.NET</bdi></span>
+            </li>
+            <li class="stat-card reveal" style="--d:.12s" data-tilt>
+              <span class="stat-value">۱۱<small>ماژول</small></span>
+              <span class="stat-label">مهاجرت به <bdi>.NET 10</bdi> با حفظ رفتار سیستم</span>
+            </li>
+            <li class="stat-card reveal" style="--d:.19s" data-tilt>
+              <span class="stat-value">۴۵<small>ساعت</small></span>
+              <span class="stat-label">دوره تخصصی <bdi>Domain-Driven Design</bdi></span>
+            </li>
+            <li class="stat-card reveal" style="--d:.26s" data-tilt>
+              <span class="stat-value">۳<small>پروژه</small></span>
+              <span class="stat-label">متن‌باز شخصی روی <bdi>GitHub</bdi></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ تجربه کاری ============ -->
+    <section class="section section-alt" id="experience" aria-labelledby="expTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۲</span>
+          <h2 class="section-title" id="expTitle">تجربه کاری</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="timeline">
+          <article class="timeline-item reveal" data-tilt>
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <header class="timeline-head">
+                <h3 class="timeline-role">برنامه‌نویس <bdi>.NET</bdi></h3>
+                <p class="timeline-date">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm-2 6h14v12H5V8Z"/></svg>
+                  تیر ۱۴۰۴ — اکنون
+                </p>
+              </header>
+              <p class="timeline-org">
+                <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4h2V5h6v2H8v10a3 3 0 0 0 6 0V9a1 1 0 0 1 2 0v11h2V9a3 3 0 0 0-6 0v8a1 1 0 0 1-2 0V7h2Z"/></svg>
+                شرکت راهکارهای نرم‌افزاری پارسان — تهران
+              </p>
+              <p class="timeline-intro">
+                پارسان ارائه‌دهنده راهکارهای یکپارچه <bdi>ERP</bdi>، اتوماسیون اداری، منابع انسانی و <bdi>BPMS</bdi> تحت وب
+                با بیش از دو دهه سابقه در پروژه‌های کلان کشور است. حوزه فعالیت من: سامانه <bdi>ParsanERP</bdi>.
+              </p>
+              <ul class="timeline-points">
+                <li>
+                  <strong>مسئول فنی تیم دو نفره</strong> در پروژه بازطراحی ماژول تردد (حضور و غیاب): تحلیل وضعیت موجود،
+                  تقسیم و برآورد تسک‌ها، هماهنگی فنی و بازبینی کد خروجی تیم.
+                </li>
+                <li>
+                  <strong>منتور نیروی کارآموز</strong> تیم توسعه: آموزش ساختار کدبیس و استانداردهای تیم، بررسی کد و
+                  پاسخ‌گویی فنی در طول دوره کارآموزی.
+                </li>
+                <li>
+                  <strong>تحلیل، طراحی و پیاده‌سازی زیرسیستم مجامع و مدیریت جلسات از صفر</strong>: جمع‌آوری نیازمندی‌ها،
+                  طراحی مدل داده، پیاده‌سازی لایه دسترسی به داده و رابط کاربری، و تحویل به کاربران واحد مجامع.
+                </li>
+                <li>
+                  <strong>مشارکت فعال در مهاجرت پلتفرم</strong> از <bdi>.NET Framework 4.8</bdi> به <bdi>.NET 10 / ASP.NET Core</bdi>
+                  در ۱۱ ماژول سازمانی (پرسنلی، ارزیابی عملکرد، آموزش، ساختار سازمانی، امور حقوقی، خودرو، تردد، مالی و
+                  حقوق‌ودستمزد، کارتابل و…): استخراج <bdi>Razor Class Library</bdi>های مستقل، پیکربندی <bdi>Razor Runtime
+                  Compilation</bdi> و ارتقای کتابخانه‌های شخص‌ثالث در مقیاس بزرگ (از جمله <bdi>ClosedXML</bdi> در ۱۳۸ فایل)
+                  با حفظ کامل رفتار سیستم.
+                </li>
+                <li>
+                  <strong>پیشگام معرفی ابزارهای هوش مصنوعی</strong> در تیم توسعه: ارزیابی و راه‌اندازی چند دستیار کدنویسی
+                  مبتنی بر <bdi>AI</bdi>، طراحی ساختار سلسله‌مراتبی فایل‌های <bdi>context</bdi> برای کنترل مصرف توکن در
+                  کدبیس بزرگ، و تدوین قانون بازبینی انسانی اجباری پیش از اعمال تغییرات خودکار در ماژول‌های مالی — که به
+                  تسریع محسوس فرآیند مهاجرت و کاهش زمان تسک‌های تکراری تیم منجر شد.
+                </li>
+                <li>
+                  <strong>توسعه و نگهداری زیرسیستم‌های امور حقوقی و شرکت‌داری</strong>، شامل ماژول امضای دیجیتال مبتنی بر
+                  <bdi>OpenXML</bdi> برای درج <bdi>SDT</bdi> در اسناد <bdi>Word</bdi>.
+                </li>
+                <li>
+                  <strong>توسعه ویجت امتیاز ارزیابی عملکرد</strong> در داشبورد پرسنل: تجمیع امتیاز ارزیابی عمومی و
+                  اختصاصی آخرین دوره از چند جدول مرتبط، با در نظر گرفتن سلسله‌مراتب مدیر مستقیم و سطح دسترسی کاربر جاری.
+                </li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ مهارت‌ها ============ -->
+    <section class="section" id="skills" aria-labelledby="skillsTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۳</span>
+          <h2 class="section-title" id="skillsTitle">مهارت‌ها</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="skills-grid">
+          <section class="skill-card reveal" style="--d:.05s" aria-labelledby="skLang">
+            <h3 class="skill-title" id="skLang">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.4 16.6-.3.9c1.3.2 2.7 0 3.9-.7l-1-1c-.9.4-1.8.6-2.6.8Zm7.2-8.5c.9 2.4.5 5-1 7l.7.7c2-2.5 2.4-5.9 1-8.8l-.7 1.1ZM7 13.7l.8.8c1.5-2.5 1.9-5.5.9-8.2l-.9.9c.5 1.9.4 3.9-.8 6.5Zm5.6-8.5-.9.9c2.4.5 4.4 2.1 5.4 4.4l1-.4c-1.2-3-4-5-7.2-5.3l.7.4ZM6.4 15.3l-.6.6c.7 1.2 1.7 2.2 2.9 2.9l.3-1c-.9-.5-1.7-1.3-2.2-2.2l-.4-.3Zm3.1-5.7-.9.9c.2 2.3 1.2 4.4 2.9 5.9l.3-1.1c-1.3-1.2-2.1-2.9-2.3-4.7v-1Z"/></svg>
+              زبان‌های برنامه‌نویسی
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip chip-strong">C# <em>اصلی</em></li>
+              <li class="chip">Python</li>
+              <li class="chip">JavaScript</li>
+              <li class="chip">T-SQL</li>
+            </ul>
+          </section>
+          <section class="skill-card reveal" style="--d:.1s" aria-labelledby="skFrame">
+            <h3 class="skill-title" id="skFrame">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2 3 14h6l-1 8 9-12h-6l1-8h-1Z"/></svg>
+              فریم‌ورک‌ها
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip">ASP.NET Core</li>
+              <li class="chip">.NET 8/10</li>
+              <li class="chip">ASP.NET MVC</li>
+              <li class="chip">Entity Framework</li>
+              <li class="chip">SignalR</li>
+              <li class="chip">Django <em>مقدماتی</em></li>
+            </ul>
+          </section>
+          <section class="skill-card reveal" style="--d:.15s" aria-labelledby="skDb">
+            <h3 class="skill-title" id="skDb">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+              پایگاه داده
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip chip-strong">SQL Server</li>
+              <li class="chip">طراحی مدل داده</li>
+              <li class="chip">Stored Procedure</li>
+              <li class="chip">بهینه‌سازی کوئری و رفع <bdi>N+1</bdi></li>
+              <li class="chip">مدیریت منطق سه‌وضعیتی <bdi>NULL</bdi></li>
+            </ul>
+          </section>
+          <section class="skill-card reveal" style="--d:.2s" aria-labelledby="skFront">
+            <h3 class="skill-title" id="skFront">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 9.5 5 6l3.5-3.5M5 6h11a4 4 0 0 1 4 4v1m-4.5 3.5L19 18l-3.5 3.5M19 18H8a4 4 0 0 1-4-4v-1"/></svg>
+              فرانت‌اند
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip">HTML5</li>
+              <li class="chip">CSS3</li>
+              <li class="chip">Bootstrap</li>
+              <li class="chip">jQuery</li>
+              <li class="chip">Razor Views</li>
+            </ul>
+          </section>
+          <section class="skill-card reveal" style="--d:.25s" aria-labelledby="skArch">
+            <h3 class="skill-title" id="skArch">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5Zm0 2.3L18.8 9 12 12.7 5.2 9 12 5.3Z"/></svg>
+              معماری و الگوها
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip chip-strong">Domain-Driven Design</li>
+              <li class="chip">Layered Architecture</li>
+              <li class="chip">Modular Monolith</li>
+              <li class="chip">Repository Pattern</li>
+              <li class="chip">Dependency Injection</li>
+              <li class="chip">Razor Class Library</li>
+              <li class="chip">Middleware و Action Filter سفارشی</li>
+            </ul>
+          </section>
+          <section class="skill-card reveal" style="--d:.3s" aria-labelledby="skTools">
+            <h3 class="skill-title" id="skTools">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18.3-6.1-6.1a5 5 0 0 0-7.1-6.7l2.8 2.8-1.4 1.4L7 6.9a5 5 0 0 0 6.7 7.1l6.1 6.1c.4.4 1 .4 1.4 0l.5-.5c.4-.4.4-1 0-1.4Z"/></svg>
+              ابزار و فرآیند
+            </h3>
+            <ul class="chips" role="list">
+              <li class="chip">Git</li>
+              <li class="chip">TFS / Azure DevOps</li>
+              <li class="chip">Visual Studio</li>
+              <li class="chip">Code Review</li>
+              <li class="chip">دستیارهای کدنویسی AI</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ پروژه‌ها ============ -->
+    <section class="section section-alt" id="projects" aria-labelledby="projTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۴</span>
+          <h2 class="section-title" id="projTitle">پروژه‌های شخصی</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="projects-grid">
+          <article class="project-card reveal" style="--d:.05s" data-tilt>
+            <div class="project-glow" aria-hidden="true"></div>
+            <header class="project-head">
+              <h3 class="project-name" dir="ltr">Personal Obligation Manager</h3>
+              <p class="project-type">پروژه شخصی</p>
+            </header>
+            <p class="project-desc">
+              سامانه مدیریت تعهدات شخصی (قسط، سررسید، اشتراک، قرارداد، بدهی، قرار ملاقات) با تقویم جلالی و
+              پشتیبانی بومی تومان و ریال؛ معماری <bdi>Modular Monolith</bdi> مبتنی بر <bdi>DDD</bdi>.
+            </p>
+            <ul class="chips" role="list">
+              <li class="chip">ASP.NET Core (.NET 10)</li>
+              <li class="chip">EF Core</li>
+              <li class="chip">PostgreSQL</li>
+              <li class="chip">React + TypeScript</li>
+              <li class="chip">Docker</li>
+            </ul>
+            <a class="project-link" href="https://github.com/YasinArabi83/personal-obligation-manager" target="_blank" rel="noopener noreferrer">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.4-1.2-1.1-1.5-1.1-1.5-.9-.6 0-.6 0-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.5 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+              <span dir="ltr">github.com/YasinArabi83/personal-obligation-manager</span>
+            </a>
+          </article>
+
+          <article class="project-card reveal" style="--d:.12s" data-tilt>
+            <div class="project-glow" aria-hidden="true"></div>
+            <header class="project-head">
+              <h3 class="project-name" dir="ltr">WeatherAPI</h3>
+              <p class="project-type">وب‌سرویس</p>
+            </header>
+            <p class="project-desc">
+              وب‌سرویس <bdi>RESTful</bdi> دریافت اطلاعات آب‌وهوا بر اساس شهر، با مستندسازی <bdi>OpenAPI/Swagger</bdi>
+              و ساختار لایه‌بندی‌شده.
+            </p>
+            <ul class="chips" role="list">
+              <li class="chip">ASP.NET Core (.NET 9)</li>
+              <li class="chip">Swagger</li>
+            </ul>
+            <a class="project-link" href="https://github.com/YasinArabi83/WeatherAPI" target="_blank" rel="noopener noreferrer">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.4-1.2-1.1-1.5-1.1-1.5-.9-.6 0-.6 0-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.5 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+              <span dir="ltr">github.com/YasinArabi83/WeatherAPI</span>
+            </a>
+          </article>
+
+          <article class="project-card reveal" style="--d:.19s" data-tilt>
+            <div class="project-glow" aria-hidden="true"></div>
+            <header class="project-head">
+              <h3 class="project-name" dir="ltr">Django Web API</h3>
+              <p class="project-type">وب‌سرویس</p>
+            </header>
+            <p class="project-desc">
+              <bdi>API</bdi> مدیریت آگهی خودرو با احراز هویت <bdi>JWT</bdi>، مدل کاربری سفارشی، فیلتر و صفحه‌بندی آگهی‌ها.
+            </p>
+            <ul class="chips" role="list">
+              <li class="chip">Django</li>
+              <li class="chip">DRF</li>
+              <li class="chip">PostgreSQL</li>
+              <li class="chip">JWT</li>
+            </ul>
+            <a class="project-link" href="https://github.com/YasinArabi83/django-web-API" target="_blank" rel="noopener noreferrer">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.4-1.2-1.1-1.5-1.1-1.5-.9-.6 0-.6 0-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.5 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+              <span dir="ltr">github.com/YasinArabi83/django-web-API</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ تحصیلات و دوره‌ها ============ -->
+    <section class="section" id="education" aria-labelledby="eduTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۵</span>
+          <h2 class="section-title" id="eduTitle">تحصیلات و دوره‌ها</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="edu-grid">
+          <section class="edu-card reveal" style="--d:.05s" data-tilt aria-labelledby="eduUni">
+            <h3 class="edu-title" id="eduUni">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 1 9l4 2.2V17c0 2.2 3.1 4 7 4s7-1.8 7-4v-5.8L23 9 12 3Zm0 2.1L19.9 9 12 12.9 4.1 9 12 5.1Z"/></svg>
+              کارشناسی مهندسی کامپیوتر — گرایش نرم‌افزار
+            </h3>
+            <p class="edu-org">دانشگاه فنی و حرفه‌ای شهید شمسی‌پور</p>
+            <p class="edu-date">۱۴۰۲ — ۱۴۰۶ (در حال تحصیل)</p>
+          </section>
+
+          <section class="edu-card reveal" style="--d:.12s" data-tilt aria-labelledby="eduDdd">
+            <h3 class="edu-title" id="eduDdd">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 1 9l4 2.2V17c0 2.2 3.1 4 7 4s7-1.8 7-4v-5.8L23 9 12 3Zm0 2.1L19.9 9 12 12.9 4.1 9 12 5.1Z"/></svg>
+              دوره <bdi>Domain-Driven Design (DDD)</bdi>
+            </h3>
+            <p class="edu-org">آکادمی آنالین — هادی احمدی</p>
+            <p class="edu-date">۱۴۰۵ | ۴۵ ساعت، ۱۵ جلسه</p>
+            <p class="edu-note">
+              پروژه‌محور با <bdi>C#</bdi> و <bdi>.NET Core</bdi>؛ الگوهای استراتژیک <bdi>(Subdomain، Ubiquitous Language،
+              Bounded Context)</bdi>، الگوهای تاکتیکی <bdi>(Entity، Value Object، Aggregate Root، Domain Event)</bdi> و
+              پیاده‌سازی معماری <bdi>Modular Monolith</bdi> در پروژه <bdi>Personal Obligation Manager</bdi>.
+            </p>
+          </section>
+
+          <section class="edu-card reveal" style="--d:.19s" data-tilt aria-labelledby="eduPy">
+            <h3 class="edu-title" id="eduPy">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 1 9l4 2.2V17c0 2.2 3.1 4 7 4s7-1.8 7-4v-5.8L23 9 12 3Zm0 2.1L19.9 9 12 12.9 4.1 9 12 5.1Z"/></svg>
+              بوت‌کمپ <bdi>Python</bdi>
+            </h3>
+            <p class="edu-org">دیجیتون</p>
+            <p class="edu-date">۱۴۰۳ | ۳۶ ساعت</p>
+          </section>
+
+          <section class="edu-card reveal" style="--d:.26s" data-tilt aria-labelledby="eduLang">
+            <h3 class="edu-title" id="eduLang">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.4 1.8-.9 3 2.9-1.9h3l-.9 3L21 9.9l-1.5 2.6 1.5 2.6-2.6 1-.9 3h-3l-2.9-1.9.9 3L9 22l-2.4-1.8.9-3-2.9 1.9h-3l.9-3L0 14.9l1.5-2.6L0 9.7l2.6-1 .9-3h3l2.9 1.9-.9-3L12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/></svg>
+              زبان انگلیسی — سطح متوسط
+            </h3>
+            <p class="edu-org">توانایی مطالعه و کار با مستندات فنی</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ تماس ============ -->
+    <section class="section section-alt" id="contact" aria-labelledby="contactTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-index">۰۶</span>
+          <h2 class="section-title" id="contactTitle">تماس با من</h2>
+          <span class="section-line" aria-hidden="true"></span>
+        </header>
+        <div class="contact-grid">
+          <div class="bizcard-scene reveal" style="--d:.08s">
+            <div class="bizcard" data-tilt data-tilt-flip>
+              <div class="bizcard-face bizcard-front">
+                <span class="bizcard-logo" aria-hidden="true">
+                  <svg viewBox="0 0 64 64"><defs><linearGradient id="bcGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect x="8" y="14" width="38" height="38" rx="6" fill="none" stroke="url(#bcGrad)" stroke-width="4" transform="rotate(-12 27 33)"/><rect x="22" y="8" width="34" height="34" rx="6" fill="none" stroke="url(#bcGrad)" stroke-width="4" transform="rotate(14 39 25)"/></svg>
+                </span>
+                <strong class="bizcard-name">یاسین عربی</strong>
+                <span class="bizcard-role">برنامه‌نویس <bdi>.NET</bdi> — توسعه سامانه‌های سازمانی</span>
+                <span class="bizcard-hint">برای دیدن اطلاعات تماس، کارت را لمس یا hover کنید</span>
+              </div>
+              <div class="bizcard-face bizcard-back" aria-hidden="true">
+                <ul class="bizcard-list">
+                  <li><span>ایمیل</span><a href="mailto:yasinarabi1383@gmail.com" dir="ltr">yasinarabi1383@gmail.com</a></li>
+                  <li><span>موبایل</span><a href="tel:+989112198417" dir="ltr">0911 219 8417</a></li>
+                  <li><span>گیت‌هاب</span><a href="https://github.com/YasinArabi83" target="_blank" rel="noopener noreferrer" dir="ltr">github.com/YasinArabi83</a></li>
+                  <li><span>لینکدین</span><a href="https://www.linkedin.com/in/yasinarabi83" target="_blank" rel="noopener noreferrer" dir="ltr">in/yasinarabi83</a></li>
+                  <li><span>محل سکونت</span><span class="bizcard-val">فردیس، کرج</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="contact-actions reveal" style="--d:.16s">
+            <p class="contact-lead">
+              برای گفتگو درباره فرصت‌های همکاری، مشارکت در پروژه‌های <bdi>.NET</bdi> یا رزومه کامل، از هر یک از
+              راه‌های زیر در ارتباط باشید.
+            </p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:yasinarabi1383@gmail.com">
+                <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+                <span class="contact-link-label">ایمیل<span class="contact-link-val" dir="ltr">yasinarabi1383@gmail.com</span></span>
+              </a>
+              <a class="contact-link" href="tel:+989112198417">
+                <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1l-2.3 2.3Z"/></svg>
+                <span class="contact-link-label">موبایل<span class="contact-link-val">۰۹۱۱۲۱۹۸۴۱۷</span></span>
+              </a>
+              <a class="contact-link" href="https://github.com/YasinArabi83" target="_blank" rel="noopener noreferrer">
+                <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.4-1.2-1.1-1.5-1.1-1.5-.9-.6 0-.6 0-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.5 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+                <span class="contact-link-label">گیت‌هاب<span class="contact-link-val" dir="ltr">github.com/YasinArabi83</span></span>
+              </a>
+              <a class="contact-link" href="https://www.linkedin.com/in/yasinarabi83" target="_blank" rel="noopener noreferrer">
+                <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 3.9 0 4.4 2.6 4.4 6V21h-4v-5.5c0-1.5-.5-2.5-1.9-2.5-1.1 0-1.8.8-2 1.5-.1.3-.1.6-.1 1V21H9V9Z"/></svg>
+                <span class="contact-link-label">لینکدین<span class="contact-link-val" dir="ltr">linkedin.com/in/yasinarabi83</span></span>
+              </a>
+            </div>
+            <a class="btn btn-primary btn-lg" href="assets/resume-yasin-arabi.pdf" download>
+              <span aria-hidden="true">⬇</span> دانلود نسخه کامل رزومه (PDF)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ پاورقی ============ -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <p class="footer-copy">© ۱۴۰۵ — یاسین عربی | ساخته‌شده با <bdi>HTML</bdi>، <bdi>CSS</bdi> و <bdi>JavaScript</bdi> خالص، بدون هیچ فریم‌ورکی</p>
+      <a class="footer-top" href="#top">
+        بازگشت به بالا <span aria-hidden="true">↑</span>
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
