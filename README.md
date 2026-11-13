@@ -22,12 +22,11 @@
 
 I'm a **.NET developer** focused on building **enterprise systems (ERP)**. I work full-time at **Parsan Software Solutions** in Tehran, where I own whole subsystems from requirements analysis to delivery, and help move a large HR/ERP platform from **.NET Framework 4.8 to .NET 10 / ASP.NET Core**.
 
-- 🏢 Technical lead of a two-person team on an attendance module redesign, and mentor to a junior developer
 - 🧱 Passionate about **Domain-Driven Design** and **Modular Monolith** architecture
 - 🤖 Introduced and standardized AI coding tools within the dev team
 - 🎓 Computer Engineering (Software) student
 - 🌱 Currently deepening my **JavaScript / React** and **SQL Server** skills
-- 📫 Open to opportunities on the path toward **Tech Lead**
+- 📫 Open to new opportunities
 
 ---
 
