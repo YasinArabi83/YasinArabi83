@@ -37,11 +37,12 @@ A hand-built, zero-dependency, 3D-flavoured resume website (pure HTML / CSS / JS
 
 | | |
 |---|---|
-| 📁 **Source** | [`resume-site/`](./resume-site) |
-| 📄 **PDF resume** | [`resume-site/assets/resume-yasin-arabi.pdf`](./resume-site/assets/resume-yasin-arabi.pdf) |
-| 📖 **Details** | [`resume-site/README.md`](./resume-site/README.md) |
+| 🔗 **Live site** | [yasinarabi83.github.io/YasinArabi83](https://yasinarabi83.github.io/YasinArabi83/) |
+| 📁 **Source** | [`index.html`](./index.html) · [`css/`](./css) · [`js/`](./js) |
+| 📄 **PDF resume** | [`assets/resume-yasin-arabi.pdf`](./assets/resume-yasin-arabi.pdf) |
+| 📖 **Details** | [`docs/resume-site.md`](./docs/resume-site.md) |
 
-To run it locally: `cd resume-site && python3 -m http.server 8000`
+To run it locally: `python3 -m http.server 8000`
 
 ---
 
