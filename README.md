@@ -32,7 +32,7 @@ I'm a **.NET developer** focused on building **enterprise systems (ERP)**. I wor
 
 ## 🌐 Interactive Resume
 
-An immersive, interactive 3D portfolio — شب‌باغ کد (Night Garden of Code) — built with Three.js + pure HTML/CSS/JS ES modules, fully RTL Persian, zero build step, lives in this repo:
+An immersive, interactive 3D portfolio — میز کار برنامه‌نویس (The Developer's Desk) — a low-poly isometric developer workspace where the main monitor types real C# code, the second screen flips between a projects dashboard and a live terminal, and every object on the desk is a numbered hotspot into a resume section. Recruiters can read the full resume as flat, IDE-styled content without touching the 3D. Built with Three.js + pure HTML/CSS/JS ES modules, fully RTL Persian, zero build step, lives in this repo:
 
 | | |
 |---|---|
