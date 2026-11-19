@@ -992,18 +992,25 @@ export async function createScene(canvas, options = {}) {
   // نور جلو
   box(pcTower, 0.015, 0.48, 0.028, 0.2, 0.33, 0.366, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2.6 }));
 
-  /* — صندلی (جلوتر — نزدیک میز، مثل وقتی که پشت میز نشسته باشی) — */
+  /* — صندلی (نیمه زیر میز — مثل این‌که همین الان بلند شده باشی) — */
   const chair = new THREE.Group();
-  chair.position.set(0.42, 0, 0.78);
-  chair.rotation.y = -0.12;
+  chair.position.set(0.36, 0, -1.22);
+  chair.rotation.y = -0.32;
   room.add(chair);
 
   const chairMat = stdMat(0x3a4353, { roughness: 0.75 });
   const seat = box(chair, 0.54, 0.1, 0.52, 0, 0.55, 0, chairMat, { cast: true });
-  const backrest = box(chair, 0.5, 0.78, 0.09, 0, 1.02, 0.26, chairMat, { rx: -0.08, cast: true });
-  box(chair, 0.36, 0.06, 0.02, 0, 1.06, 0.315, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 1.4 }));
-  box(chair, 0.36, 0.06, 0.02, 0, 0.82, 0.29, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 1.4 }));
-  box(chair, 0.3, 0.16, 0.08, 0, 1.48, 0.32, stdMat(0x2a3140), { rx: -0.08 });
+  /* پشتی کمی کوتاه‌تر تا فنجان چای پشت صندلی دیده شود */
+  const backrest = box(chair, 0.5, 0.72, 0.09, 0, 0.99, 0.26, chairMat, { rx: -0.08, cast: true });
+  box(chair, 0.36, 0.06, 0.02, 0, 1.0, 0.315, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 1.4 }));
+  box(chair, 0.36, 0.06, 0.02, 0, 0.78, 0.29, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 1.4 }));
+  box(chair, 0.28, 0.14, 0.08, 0, 1.42, 0.3, stdMat(0x2a3140), { rx: -0.08 });
+  /* دسته‌ها — صندلی واقعی بدون دسته ناقصه */
+  const armMat = stdMat(0x2a3140, { roughness: 0.7 });
+  for (const sx of [-1, 1]) {
+    box(chair, 0.045, 0.2, 0.05, sx * 0.3, 0.7, 0.02, armMat, { cast: true });
+    box(chair, 0.08, 0.035, 0.32, sx * 0.3, 0.82, -0.03, stdMat(0x1c2129, { roughness: 0.85 }), { cast: true });
+  }
   cyl(chair, 0.035, 0.035, 0.36, 0, 0.36, 0, stdMat(0x39404d, { metalness: 0.6, roughness: 0.35 }), 12);
   for (let i = 0; i < 5; i++) {
     const spoke = box(chair, 0.055, 0.045, 0.34, 0, 0.1, 0, stdMat(0x2a2f3a), { ry: (i / 5) * Math.PI * 2 });
