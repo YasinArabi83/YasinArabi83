@@ -48,27 +48,79 @@ export function initUI({ reducedMotion = false } = {}) {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---------- منوی موبایل ---------- */
+  /* ---------- منوی کشویی موبایل (از چپ) ---------- */
   const menuToggle = document.getElementById('menu-toggle');
-  const navMobile = document.getElementById('nav-mobile');
-  if (menuToggle && navMobile) {
-    menuToggle.addEventListener('click', () => {
-      const open = !navMobile.hidden;
-      navMobile.hidden = open;
-      menuToggle.setAttribute('aria-expanded', String(!open));
-      menuToggle.setAttribute('aria-label', open ? 'باز کردن منو' : 'بستن منو');
+  const navDrawer = document.getElementById('nav-drawer');
+  const backdrop = document.getElementById('menu-backdrop');
+  const drawerClose = document.getElementById('drawer-close');
+  let menuOpen = false;
+  let lastFocused = null;
+
+  function setMenu(open) {
+    if (!navDrawer || open === menuOpen) return;
+    menuOpen = open;
+    navDrawer.classList.toggle('open', open);
+    if (backdrop) backdrop.classList.toggle('show', open);
+    navDrawer.setAttribute('aria-hidden', String(!open));
+    if (backdrop) backdrop.setAttribute('aria-hidden', String(!open));
+    if (menuToggle) {
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');
+    }
+    document.body.classList.toggle('menu-open', open);
+    if (open) {
+      lastFocused = document.activeElement;
+      if (drawerClose) drawerClose.focus();
+    } else {
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+      lastFocused = null;
+    }
+  }
+
+  if (menuToggle && navDrawer) {
+    menuToggle.addEventListener('click', () => setMenu(!menuOpen));
+    if (drawerClose) drawerClose.addEventListener('click', () => setMenu(false));
+    if (backdrop) backdrop.addEventListener('click', () => setMenu(false));
+
+    /* بستن با کلیک روی لینک‌ها — این شنونده قبل از شنوندهٔ سراسری سند اجرا می‌شود
+       تا قفل اسکرول باز شود و اسکرول نرم به مقصد کار کند. */
+    navDrawer.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setMenu(false);
     });
-    navMobile.addEventListener('click', (e) => {
-      if (e.target.closest('a')) {
-        navMobile.hidden = true;
-        menuToggle.setAttribute('aria-expanded', 'false');
+
+    /* ESC + تلهٔ فوکوس */
+    document.addEventListener('keydown', (e) => {
+      if (!menuOpen) return;
+      if (e.key === 'Escape') { setMenu(false); if (menuToggle) menuToggle.focus(); return; }
+      if (e.key === 'Tab') {
+        const focusables = Array.from(
+          navDrawer.querySelectorAll('a[href], button:not([disabled])')
+        ).filter((el) => el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = navDrawer.contains(document.activeElement) ? document.activeElement : first;
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        else if (document.activeElement !== active) { e.preventDefault(); active.focus(); }
+        else if (document.activeElement === navDrawer) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
       }
     });
+
+    /* بستن خودکار هنگام گذر به نمای دسکتاپ */
+    const desktopMq = window.matchMedia('(min-width: 769px)');
+    const onDesktop = () => { if (desktopMq.matches && menuOpen) setMenu(false); };
+    if (desktopMq.addEventListener) desktopMq.addEventListener('change', onDesktop);
+    else if (desktopMq.addListener) desktopMq.addListener(onDesktop);
   }
 
   /* ---------- اسکرول‌اسپای ---------- */
-  const spyLinks = new Map();
-  document.querySelectorAll('.nav-link[data-spy]').forEach((l) => spyLinks.set(l.dataset.spy, l));
+  const spyLinks = new Map(); // id -> Element[]
+  document.querySelectorAll('.nav-link[data-spy], .drawer-link[data-spy]').forEach((l) => {
+    const key = l.dataset.spy;
+    if (!spyLinks.has(key)) spyLinks.set(key, []);
+    spyLinks.get(key).push(l);
+  });
   const spySections = ['about', 'skills', 'experience', 'projects', 'education', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean);
@@ -77,9 +129,9 @@ export function initUI({ reducedMotion = false } = {}) {
     const spyIO = new IntersectionObserver((entries) => {
       for (const en of entries) {
         if (!en.isIntersecting) continue;
-        spyLinks.forEach((l) => l.classList.remove('active'));
-        const link = spyLinks.get(en.target.id);
-        if (link) link.classList.add('active');
+        spyLinks.forEach((arr) => arr.forEach((l) => l.classList.remove('active')));
+        const actives = spyLinks.get(en.target.id) || [];
+        actives.forEach((l) => l.classList.add('active'));
       }
     }, { rootMargin: '-38% 0px -55% 0px' });
     spySections.forEach((s) => spyIO.observe(s));

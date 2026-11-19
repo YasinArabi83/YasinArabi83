@@ -1028,17 +1028,63 @@ export async function createScene(canvas, options = {}) {
     }
   }
 
+  /* ----- مناطق ممنوعه: نقاط داغ هرگز روی متن هیرو، نوار بالا
+         یا کاشی‌های پایین صفحه نمی‌نشینند (رفع هم‌پوشانی موبایل) ----- */
+  const keepOutEls = ['hero-copy', 'hero-legend', 'hero-hint', 'topbar']
+    .map((id) => document.getElementById(id))
+    .concat(Array.from(document.querySelectorAll('.scroll-cue')))
+    .filter(Boolean);
+  const keepOutPad = 26;
+  let keepOutRects = [];
+  let keepOutDirty = true;
+  let keepOutFrame = 0;
+
+  function refreshKeepOutRects() {
+    const cRect = canvas.getBoundingClientRect();
+    keepOutRects = [];
+    for (const el of keepOutEls) {
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) continue; /* مخفی یا بدون عرض */
+      keepOutRects.push({
+        left: r.left - cRect.left - keepOutPad,
+        top: r.top - cRect.top - keepOutPad,
+        right: r.right - cRect.left + keepOutPad,
+        bottom: r.bottom - cRect.top + keepOutPad,
+      });
+    }
+    keepOutDirty = false;
+  }
+
+  const invalidateKeepOut = () => { keepOutDirty = true; };
+  window.addEventListener('resize', invalidateKeepOut, { passive: true });
+  window.addEventListener('scroll', invalidateKeepOut, { passive: true });
+
   const projV = new THREE.Vector3();
   function updateHotspots() {
     if (!hotspotLayer) return;
+    keepOutFrame += 1;
+    if (keepOutDirty || keepOutFrame > 150) {
+      refreshKeepOutRects();
+      keepOutFrame = 0;
+    }
     const w = canvas.clientWidth || 1;
     const hgt = canvas.clientHeight || 1;
     for (const hs of hotspotEls) {
       projV.copy(hs.anchor).project(camera);
       if (projV.z > 1 || projV.z < -1) { hs.el.style.display = 'none'; continue; }
+      const x = (projV.x * 0.5 + 0.5) * w;
+      const y = (-projV.y * 0.5 + 0.5) * hgt;
+      /* لبه‌های صفحه و مناطق ممنوعه (متن‌ها/نوار بالا/کاشی‌های پایین) */
+      let covered = x < 16 || x > w - 16 || y < 10 || y > hgt - 10;
+      if (!covered) {
+        for (const r of keepOutRects) {
+          if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) { covered = true; break; }
+        }
+      }
+      if (covered) { hs.el.style.display = 'none'; continue; }
       hs.el.style.display = '';
-      hs.el.style.left = `${(projV.x * 0.5 + 0.5) * w}px`;
-      hs.el.style.top = `${(-projV.y * 0.5 + 0.5) * hgt}px`;
+      hs.el.style.left = `${x}px`;
+      hs.el.style.top = `${y}px`;
     }
   }
 
@@ -1262,6 +1308,8 @@ export async function createScene(canvas, options = {}) {
     canvas.removeEventListener('pointermove', onPointerMove);
     canvas.removeEventListener('pointerup', onPointerUp);
     canvas.removeEventListener('pointercancel', onPointerUp);
+    window.removeEventListener('resize', invalidateKeepOut);
+    window.removeEventListener('scroll', invalidateKeepOut);
     hotspotEls.forEach((h) => h.el.remove());
     scene.traverse((o) => {
       if (o.isMesh) {
