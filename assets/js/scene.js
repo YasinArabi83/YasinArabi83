@@ -1101,6 +1101,16 @@ export async function createScene(canvas, options = {}) {
     }
   }
 
+  /* شماره‌های راهنما هنگام چرخش صحنه محو می‌شوند و بعد از نشستن دوربین برمی‌گردند —
+     دیگر وسط درگ «جا زدن» نمی‌کنند */
+  let hotspotsMoving = false;
+  let hotspotsShowAt = 0;
+  function setHotspotsMoving(v) {
+    if (hotspotsMoving === v) return;
+    hotspotsMoving = v;
+    if (hotspotLayer) hotspotLayer.classList.toggle('moving', v);
+  }
+
   /* ===== کنترل‌ها ===== */
 
   let dragging = false;
@@ -1165,6 +1175,11 @@ export async function createScene(canvas, options = {}) {
       const dy = e.clientY - lastY;
       lastX = e.clientX;
       lastY = e.clientY;
+      /* فقط وقتی واقعاً درگ شروع شد (بیش از ۷ پیکسل حرکت) شماره‌ها محو می‌شوند —
+         تک‌تپ ساده باعث چشمک نمی‌شود */
+      if (!hotspotsMoving && Math.hypot(e.clientX - downX, e.clientY - downY) > 7) {
+        setHotspotsMoving(true);
+      }
       targetAz = clamp(targetAz - dx * 0.0045, -0.12, 1.08);
       targetPol = clamp(targetPol - dy * 0.0032, 1.0, 1.26);
     }
@@ -1176,6 +1191,8 @@ export async function createScene(canvas, options = {}) {
     canvas.classList.remove('grabbing');
     wrap && wrap.classList.remove('dragging');
     restAz = targetAz;
+    /* بعد از رهاکردن: اگر دوربین سریع همگرا نشد (دستگاه کند)، حداکثر ۸۰۰ms بعد شماره‌ها برمی‌گردند */
+    hotspotsShowAt = performance.now() + 800;
     const dist = Math.hypot(e.clientX - downX, e.clientY - downY);
     if (dist < 7) {
       /* انتخاب تازه از محل رهاکردن — برای تاچ (که pointermove ندارد) هم درست کار می‌کند */
@@ -1240,6 +1257,12 @@ export async function createScene(canvas, options = {}) {
     parallax.x = lerp(parallax.x, reducedMotion ? 0 : parallax.tx, 1 - Math.exp(-4 * dt));
     parallax.y = lerp(parallax.y, reducedMotion ? 0 : parallax.ty, 1 - Math.exp(-4 * dt));
     applyCamera();
+
+    // دوربین بعد از رهاکردن به هدف نزدیک شده؟ (یا مهلت زمانی گذشته؟) شماره‌ها برگردند
+    if (hotspotsMoving && !dragging) {
+      const settled = Math.abs(az - azGoal) < 0.004 && Math.abs(pol - targetPol) < 0.004;
+      if (settled || now > hotspotsShowAt) setHotspotsMoving(false);
+    }
 
     // صفحه‌ها — بوم فقط وقتی بازکشیده می‌شود که محتوا یا چشمکِ مکان‌نما عوض شده باشد
     // (قبلاً IDE با بوم 1024×680 در هر فریم بازکشیده و آپلود می‌شد — گران‌ترین بخش)
@@ -1345,11 +1368,18 @@ export async function createScene(canvas, options = {}) {
 
   const io = new IntersectionObserver((entries) => {
     active = entries[0].isIntersecting;
-    if (active) clock.getDelta();
+    if (active) {
+      clock.getDelta();
+      /* برگشت به صحنه: اگر شماره‌ها محو مانده بودند بدون قید و شرط برگردند */
+      if (!dragging) setHotspotsMoving(false);
+    }
   }, { threshold: 0.02 });
   io.observe(canvas);
 
-  const onVis = () => { active = !document.hidden; };
+  const onVis = () => {
+    active = !document.hidden;
+    if (active && !dragging) setHotspotsMoving(false);
+  };
   document.addEventListener('visibilitychange', onVis);
 
   applyCamera();
@@ -1360,6 +1390,7 @@ export async function createScene(canvas, options = {}) {
 
   function dispose() {
     cancelAnimationFrame(rafId);
+    if (hotspotLayer) hotspotLayer.classList.remove('moving');
     ro.disconnect();
     io.disconnect();
     document.removeEventListener('visibilitychange', onVis);

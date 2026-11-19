@@ -449,7 +449,15 @@ body.menu-open { overflow: hidden; }
   z-index: 3;
   pointer-events: none;
   direction: rtl;
+  transition: opacity 0.3s ease;
 }
+/* هنگام چرخش صحنه، شماره‌ها سریع محو می‌شوند تا «جا زدن» و پرششان دیده نشود؛
+   بعد از نشستن دوربین با محوِ نرم برمی‌گردند */
+.hotspots.moving {
+  opacity: 0;
+  transition: opacity 0.09s linear;
+}
+.hotspots.moving .hotspot { pointer-events: none; }
 .hotspot {
   position: absolute;
   left: 0;
