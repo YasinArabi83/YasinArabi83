@@ -32,12 +32,12 @@ I'm a **.NET developer** focused on building **enterprise systems (ERP)**. I wor
 
 ## 🌐 Interactive Resume
 
-A hand-built, zero-dependency, 3D-flavoured resume website (pure HTML / CSS / JS, RTL Persian) lives in this repo:
+An immersive, interactive 3D portfolio — شب‌باغ کد (Night Garden of Code) — built with Three.js + pure HTML/CSS/JS ES modules, fully RTL Persian, zero build step, lives in this repo:
 
 | | |
 |---|---|
 | 🔗 **Live site** | [yasinarabi83.github.io/YasinArabi83](https://yasinarabi83.github.io/YasinArabi83/) |
-| 📁 **Source** | [`index.html`](./index.html) · [`css/`](./css) · [`js/`](./js) |
+| 📁 **Source** | [`index.html`](./index.html) · [`assets/`](./assets) |
 | 📄 **PDF resume** | [`assets/resume-yasin-arabi.pdf`](./assets/resume-yasin-arabi.pdf) |
 | 📖 **Details** | [`docs/resume-site.md`](./docs/resume-site.md) |
 
