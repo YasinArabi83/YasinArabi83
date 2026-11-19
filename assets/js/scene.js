@@ -197,8 +197,8 @@ export async function createScene(canvas, options = {}) {
   fillLight.position.set(4.5, 3.2, 5);
   scene.add(fillLight);
 
-  const lampLight = new THREE.PointLight(0xffb066, 12, 4.6, 2);
-  lampLight.position.set(-1.32, 1.74, -2.45);
+  const lampLight = new THREE.PointLight(0xffb066, 12, 4.2, 2);
+  lampLight.position.set(-0.9, 1.36, -2.07);
   scene.add(lampLight);
 
   const screenLight = new THREE.PointLight(0x9fe6b0, 5.5, 3.0, 2);
@@ -213,9 +213,9 @@ export async function createScene(canvas, options = {}) {
   windowLight.position.set(-3.7, 2.1, -1.4);
   scene.add(windowLight);
 
-  // نور سبز ملایم کنار کیس برای خوانا شدنش
-  const pcLight = new THREE.PointLight(0x3fb950, 3, 2.2, 2);
-  pcLight.position.set(1.7, 0.55, -2.3);
+  // نور سبز ملایم زیر میز — از کیس به کف اتاق می‌تابد
+  const pcLight = new THREE.PointLight(0x3fb950, 2.4, 2.0, 2);
+  pcLight.position.set(1.28, 0.42, -1.95);
   scene.add(pcLight);
 
   /* ===== بافت‌های رویه‌ای ===== */
@@ -621,12 +621,23 @@ export async function createScene(canvas, options = {}) {
   const metalMat = stdMat(0x39404d, { roughness: 0.4, metalness: 0.55 });
   const top = box(desk, 3.3, 0.09, 1.42, 0, 0.755, 0, woodMat, { cast: true, receive: true });
   box(desk, 3.3, 0.025, 0.05, 0, 0.7, 0.68, stdMat(0x5d3d23));
+  // نوار لبهٔ دورتادور رویه (حس «میز واقعی» به‌جای تخت صاف)
+  const edgeMat = stdMat(0x5d3d23, { roughness: 0.65 });
+  box(desk, 3.32, 0.012, 0.035, 0, 0.802, 0.7, edgeMat);
+  box(desk, 3.32, 0.012, 0.035, 0, 0.802, -0.7, edgeMat);
+  box(desk, 0.035, 0.012, 1.42, 1.65, 0.802, 0, edgeMat);
+  box(desk, 0.035, 0.012, 1.42, -1.65, 0.802, 0, edgeMat);
   const legXs = [-1.56, 1.56];
   const legZs = [-0.6, 0.6];
   for (const lx of legXs) for (const lz of legZs) {
     box(desk, 0.07, 0.71, 0.07, lx, 0.355, lz, metalMat, { cast: true });
+    /* کفی لاستیکی زیر هر پا */
+    box(desk, 0.095, 0.02, 0.095, lx, 0.01, lz, stdMat(0x14181d));
   }
   box(desk, 3.05, 0.05, 0.05, 0, 0.3, -0.55, metalMat);
+  /* مهاربندهای کناری بین پایه‌ها */
+  box(desk, 0.04, 0.04, 1.16, 1.56, 0.22, 0, metalMat);
+  box(desk, 0.04, 0.04, 1.16, -1.56, 0.22, 0, metalMat);
 
   /* — مانیتور اصلی — */
   const monitorMain = new THREE.Group();
@@ -708,47 +719,62 @@ export async function createScene(canvas, options = {}) {
   let swapTimer = 15;
   let showTerm = false;
 
-  /* — کیبورد مکانیکال — */
+  /* — کیبورد مکانیکال (بازسازی: بدنهٔ شناور، ردیف F، کلیدهای پهن، فلش‌ها) — */
   const keyboard = new THREE.Group();
   keyboard.name = 'keyboard';
   keyboard.position.set(0.3, DESK_Y + 0.028, 0.5);
   keyboard.rotation.y = -0.06;
   desk.add(keyboard);
 
-  const kbBase = box(keyboard, 0.64, 0.05, 0.235, 0, 0, 0, stdMat(0x2e3642, { roughness: 0.6 }), { cast: true });
-  // کلیدها به‌صورت InstancedMesh
-  const keyGeo = new THREE.BoxGeometry(0.034, 0.02, 0.034);
-  const keyMat = stdMat(0x333b49, { roughness: 0.55 });
-  const rows = [14, 13, 12, 11];
-  const keyPositions = [];
-  for (let r = 0; r < rows.length; r++) {
-    const n = rows[r];
-    const w = 0.052;
-    const startX = -((n - 1) * w) / 2;
-    for (let k = 0; k < n; k++) {
-      keyPositions.push([startX + k * w, 0.032, -0.075 + r * 0.049]);
-    }
-  }
-  const keysIM = new THREE.InstancedMesh(keyGeo, keyMat, keyPositions.length);
+  // صفحهٔ زیرین کمی بزرگ‌تر (حس کیبورد شناور) + بدنهٔ اصلی
+  box(keyboard, 0.66, 0.016, 0.26, 0, -0.02, 0, stdMat(0x14181d, { roughness: 0.7 }), { cast: true });
+  box(keyboard, 0.62, 0.042, 0.225, 0, 0, 0, stdMat(0x2e3642, { roughness: 0.6 }));
+
+  const keyMat = stdMat(0x39424f, { roughness: 0.55 });
+  const keyGeo = new THREE.BoxGeometry(0.036, 0.02, 0.036);
   const dummy = new THREE.Object3D();
-  keyPositions.forEach(([x, y, z], i) => {
+  const keyPos = [];
+  // ردیف F (کلیدهای کوچک‌تر با فاصله)
+  for (let k = 0; k < 12; k++) keyPos.push([-0.253 + k * 0.046, 0.032, -0.086, 0.78]);
+  // سه ردیف اصلی (گام 0.046 — کلیدها دیگر از بدنه بیرون نمی‌زنند)
+  const kbRows = [{ z: -0.038, n: 13 }, { z: 0.008, n: 13 }, { z: 0.054, n: 12 }];
+  for (const row of kbRows) {
+    const startX = -((row.n - 1) * 0.046) / 2;
+    for (let k = 0; k < row.n; k++) keyPos.push([startX + k * 0.046, 0.032, row.z, 1]);
+  }
+  const keysIM = new THREE.InstancedMesh(keyGeo, keyMat, keyPos.length);
+  keyPos.forEach(([x, y, z, s], i) => {
     dummy.position.set(x, y, z);
+    dummy.scale.setScalar(s);
     dummy.rotation.x = 0.06;
     dummy.updateMatrix();
     keysIM.setMatrixAt(i, dummy.matrix);
   });
+  dummy.scale.setScalar(1);
+  dummy.rotation.set(0, 0, 0);
   keysIM.castShadow = tier.shadows;
   keyboard.add(keysIM);
-  // کلید فاصله
-  box(keyboard, 0.24, 0.02, 0.034, 0, 0.032, -0.075 + 4 * 0.049, keyMat);
-  // کلیدهای روشن (W-A-S-D باحال!)
-  const glowKeyMat = stdMat(0x2a2f3a, { emissive: 0x3fb950, emissiveIntensity: 0.9, roughness: 0.5 });
-  box(keyboard, 0.034, 0.022, 0.034, -0.104, 0.033, -0.026, glowKeyMat);
-  box(keyboard, 0.034, 0.022, 0.034, -0.156, 0.033, 0.023, glowKeyMat);
-  box(keyboard, 0.034, 0.022, 0.034, -0.104, 0.033, 0.023, glowKeyMat);
-  box(keyboard, 0.034, 0.022, 0.034, -0.052, 0.033, 0.023, glowKeyMat);
-  // نور زیر کیبورد
-  box(keyboard, 0.6, 0.006, 0.012, 0, -0.022, 0.115, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2.2 }));
+  // ردیف پایین: کلیدهای پهن (Ctrl/Win/Alt/فاصله)
+  box(keyboard, 0.075, 0.022, 0.036, -0.238, 0.034, 0.099, keyMat);
+  box(keyboard, 0.058, 0.022, 0.036, -0.172, 0.034, 0.099, keyMat);
+  box(keyboard, 0.058, 0.022, 0.036, -0.114, 0.034, 0.099, keyMat);
+  box(keyboard, 0.168, 0.024, 0.036, -0.001, 0.034, 0.099, keyMat);
+  box(keyboard, 0.058, 0.022, 0.036, 0.112, 0.034, 0.099, keyMat);
+  box(keyboard, 0.075, 0.022, 0.036, 0.181, 0.034, 0.099, keyMat);
+  // خوشهٔ فلش‌ها (سمت راست)
+  box(keyboard, 0.036, 0.022, 0.036, 0.244, 0.034, 0.075, keyMat);
+  box(keyboard, 0.036, 0.022, 0.036, 0.218, 0.034, 0.112, keyMat);
+  box(keyboard, 0.036, 0.022, 0.036, 0.244, 0.034, 0.112, keyMat);
+  box(keyboard, 0.036, 0.022, 0.036, 0.270, 0.034, 0.112, keyMat);
+  // کلیدهای روشن: Esc + W-A-S-D (این‌بار روی ردیف‌های واقعی)
+  const glowKeyMat = stdMat(0x2a2f3a, { emissive: 0x3fb950, emissiveIntensity: 1.5, roughness: 0.5 });
+  box(keyboard, 0.038, 0.024, 0.038, -0.253, 0.033, -0.086, glowKeyMat);
+  box(keyboard, 0.038, 0.024, 0.038, -0.092, 0.033, -0.038, glowKeyMat);
+  box(keyboard, 0.038, 0.024, 0.038, -0.138, 0.033, 0.008, glowKeyMat);
+  box(keyboard, 0.038, 0.024, 0.038, -0.092, 0.033, 0.008, glowKeyMat);
+  box(keyboard, 0.038, 0.024, 0.038, -0.046, 0.033, 0.008, glowKeyMat);
+  // نور زیر کیبورد (لبهٔ روبه‌رو)
+  box(keyboard, 0.64, 0.006, 0.012, 0, -0.016, 0.131, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2.2 }));
 
   /* — ماوس و پد — */
   box(desk, 0.36, 0.008, 0.28, 0.95, DESK_Y + 0.008, 0.42, stdMat(0x10141a, { roughness: 0.95 }));
@@ -802,32 +828,67 @@ export async function createScene(canvas, options = {}) {
     duck.add(eye);
   });
 
-  /* — چراغ مطالعه — */
+  /* — چراغ مطالعه (بازسازی: قاعدهٔ دولایه + دو بازوی مفصلی + سایهٔ مخروطی) —
+     جلویِ مانیتور دوم نشسته تا از دید دوربین پنهان نماند */
   const lamp = new THREE.Group();
-  lamp.position.set(-1.42, DESK_Y, -0.32);
+  lamp.position.set(-1.5, DESK_Y, 0.45);
+  lamp.rotation.y = 0.15;
   desk.add(lamp);
-  cyl(lamp, 0.1, 0.12, 0.035, 0, 0.017, 0, stdMat(0x1c2129, { metalness: 0.4, roughness: 0.5 }), 20, {});
-  const armMat = stdMat(0x2a3038, { metalness: 0.5, roughness: 0.45 });
-  const arm1 = box(lamp, 0.035, 0.52, 0.035, 0.06, 0.28, 0, armMat, { rz: 0.28, cast: true });
-  const arm2 = box(lamp, 0.035, 0.44, 0.035, 0.22, 0.62, 0, armMat, { rz: -0.9, cast: true });
-  const lampHead = cyl(lamp, 0.055, 0.115, 0.13, 0.42, 0.78, 0, stdMat(0x1c2129, { metalness: 0.35, roughness: 0.5 }), 18, { rz: 0.7 });
-  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 10), stdMat(0xffca8a, { emissive: 0xffb066, emissiveIntensity: 2.2 }));
-  bulb.position.set(0.36, 0.72, 0);
+  const lampDarkMat = stdMat(0x1c2129, { metalness: 0.4, roughness: 0.5 });
+  const lampMetal = stdMat(0x2a3038, { metalness: 0.55, roughness: 0.4 });
+  // قاعدهٔ سنگین دولایه
+  cyl(lamp, 0.115, 0.125, 0.022, 0, 0.011, 0, lampDarkMat, 22, { cast: true });
+  cyl(lamp, 0.075, 0.085, 0.02, 0, 0.03, 0, lampMetal, 18);
+  // محراب کوتاه + مفصل
+  cyl(lamp, 0.013, 0.013, 0.05, 0.02, 0.065, 0, lampMetal, 10);
+  // بازوی پایینی (به سمت آرنج بالا می‌رود)
+  box(lamp, 0.03, 0.34, 0.03, 0.08, 0.21, 0, lampMetal, { rz: -0.36, cast: true });
+  // آرنج + پیچ تنظیم
+  cyl(lamp, 0.026, 0.026, 0.05, 0.135, 0.375, 0, lampMetal, 12, { rz: Math.PI / 2 });
+  cyl(lamp, 0.008, 0.008, 0.03, 0.135, 0.375, 0.03, stdMat(0x14181d), 8, { rx: Math.PI / 2 });
+  // بازوی بالایی (به جلو و پایین، سمت میز)
+  box(lamp, 0.028, 0.4, 0.028, 0.27, 0.5, 0, lampMetal, { rz: -0.85, cast: true });
+  // سایهٔ مخروطی + دستگیرهٔ پشت آن
+  cyl(lamp, 0.042, 0.105, 0.11, 0.435, 0.615, 0, lampDarkMat, 18, { rz: 0.5, cast: true });
+  box(lamp, 0.012, 0.05, 0.012, 0.405, 0.66, 0, lampMetal, { rz: 0.5 });
+  // حباب گرم، دقیقاً داخل دهانهٔ سایه
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.033, 12, 10), stdMat(0xffca8a, { emissive: 0xffb066, emissiveIntensity: 3.2 }));
+  bulb.position.set(0.462, 0.566, 0);
   lamp.add(bulb);
 
-  /* — هدفون روی استند — */
+  /* — هدفون روی استند (بازسازی: کاپ‌ها هم‌راستا با دو سرِ هدبند) — */
   const hp = new THREE.Group();
-  hp.position.set(1.45, DESK_Y, -0.42);
+  hp.position.set(1.48, DESK_Y, -0.4);
+  hp.rotation.y = -0.35;
   desk.add(hp);
-  cyl(hp, 0.045, 0.055, 0.02, 0, 0.01, 0, stdMat(0x20242d), 16);
-  cyl(hp, 0.012, 0.012, 0.22, 0, 0.12, 0, stdMat(0x39404d, { metalness: 0.5, roughness: 0.4 }), 12);
-  const hpBand = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.014, 10, 24, Math.PI), stdMat(0x1c2129, { roughness: 0.6 }));
-  hpBand.position.y = 0.24;
-  hpBand.rotation.y = Math.PI / 2;
+  const hpDark = stdMat(0x1c2129, { roughness: 0.6 });
+  const hpMetal = stdMat(0x39404d, { metalness: 0.5, roughness: 0.4 });
+  // استند: پایه + میله (نوک میله زیر بالای هدبند)
+  cyl(hp, 0.05, 0.06, 0.018, 0, 0.009, 0, hpDark, 18, { cast: true });
+  cyl(hp, 0.013, 0.013, 0.26, 0, 0.13, 0, hpMetal, 10);
+  // هدبند: نیم‌حلقه در صفحهٔ x-y — دو سرش دقیقاً روی محور x (هم‌راستای کاپ‌ها)
+  const hpBand = new THREE.Mesh(new THREE.TorusGeometry(0.082, 0.013, 10, 26, Math.PI), hpDark);
+  hpBand.position.y = 0.185;
   hp.add(hpBand);
-  [-0.075, 0.075].forEach((ex) => {
-    const cup = cyl(hp, 0.045, 0.045, 0.03, ex, 0.24, 0, stdMat(0x14181d, { roughness: 0.7 }), 16, { rz: Math.PI / 2 });
-    cup.castShadow = tier.shadows;
+  // بالشتک بالای هدبند
+  const hpPad = new THREE.Mesh(new THREE.TorusGeometry(0.082, 0.009, 8, 20, Math.PI * 0.6), stdMat(0x2a3038, { roughness: 0.85 }));
+  hpPad.position.y = 0.185;
+  hpPad.rotation.z = Math.PI * 0.2;
+  hp.add(hpPad);
+  [-0.082, 0.082].forEach((ex) => {
+    // یراق اتصال کاپ به هدبند
+    box(hp, 0.012, 0.045, 0.02, ex, 0.175, 0, hpMetal);
+    // کاپ (محور استوانه در راستای x)
+    cyl(hp, 0.05, 0.046, 0.038, ex, 0.128, 0, hpDark, 18, { rz: Math.PI / 2, cast: true });
+    // بالشتک کاپ (سمت داخل)
+    const cushion = new THREE.Mesh(new THREE.TorusGeometry(0.032, 0.011, 8, 18), stdMat(0x2a3038, { roughness: 0.9 }));
+    cushion.position.set(ex - Math.sign(ex) * 0.02, 0.128, 0);
+    cushion.rotation.y = Math.PI / 2;
+    hp.add(cushion);
+    // LED سبز کوچک روی بیرون کاپ
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.006, 6, 6), stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2 }));
+    dot.position.set(ex + Math.sign(ex) * 0.023, 0.128, 0.026);
+    hp.add(dot);
   });
 
   /* — کتابخانهٔ دیواری — */
@@ -890,51 +951,51 @@ export async function createScene(canvas, options = {}) {
   box(photoFrame, 0.16, 0.2, 0.012, 0, 0.1, 0, stdMat(0x1c2129));
   box(photoFrame, 0.13, 0.17, 0.005, 0, 0.1, 0.008, stdMat(0x2c3a2f, { emissive: 0x24361f, emissiveIntensity: 0.5 }));
 
-  /* — کیس کامپیوتر — */
+  /* — کیس کامپیوتر (زیر میز، سمت راست — ارتفاعش کم شده تا زیر رویهٔ میز جا شود) — */
   const pcTower = new THREE.Group();
   pcTower.name = 'pcTower';
-  pcTower.position.set(1.5, 0, -0.42);
-  pcTower.rotation.y = -0.16;
+  pcTower.position.set(1.06, 0, -2.02);
+  pcTower.rotation.y = 0.32;
   room.add(pcTower);
 
   const pcMat = stdMat(0x2b323f, { roughness: 0.5, metalness: 0.35 });
-  box(pcTower, 0.44, 0.92, 0.8, 0, 0.46, 0, pcMat, { cast: true });
+  box(pcTower, 0.42, 0.66, 0.72, 0, 0.33, 0, pcMat, { cast: true });
   // شیشهٔ سمت
   const glass = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.72, 0.78),
+    new THREE.PlaneGeometry(0.56, 0.5),
     new THREE.MeshStandardMaterial({ color: 0x1a2c33, transparent: true, opacity: 0.16, roughness: 0.1, metalness: 0.4 })
   );
   glass.rotation.y = Math.PI / 2;
-  glass.position.set(0.222, 0.48, 0);
+  glass.position.set(0.212, 0.34, 0);
   pcTower.add(glass);
   // قطعات داخلی
-  box(pcTower, 0.3, 0.1, 0.42, -0.02, 0.52, 0, stdMat(0x14181f, { emissive: 0x3fb950, emissiveIntensity: 0.35 }));
-  box(pcTower, 0.02, 0.6, 0.05, -0.16, 0.45, -0.2, stdMat(0x101318, { emissive: 0xe3b341, emissiveIntensity: 1.4 }));
+  box(pcTower, 0.28, 0.08, 0.34, -0.02, 0.35, 0, stdMat(0x14181f, { emissive: 0x3fb950, emissiveIntensity: 0.35 }));
+  box(pcTower, 0.02, 0.34, 0.05, -0.15, 0.34, -0.16, stdMat(0x101318, { emissive: 0xe3b341, emissiveIntensity: 1.4 }));
   // فن
   const fan = new THREE.Group();
-  fan.position.set(0.14, 0.45, 0.05);
+  fan.position.set(0.12, 0.28, 0.02);
   fan.rotation.y = Math.PI / 2;
   pcTower.add(fan);
-  const fanRing = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.012, 8, 24), stdMat(0x10141a));
+  const fanRing = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.011, 8, 22), stdMat(0x10141a));
   fan.add(fanRing);
   const fanBlades = new THREE.Group();
   fan.add(fanBlades);
   const bladeMat = stdMat(0x2a2f3a, { emissive: 0x3fb950, emissiveIntensity: 0.8 });
   for (let i = 0; i < 5; i++) {
-    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.085, 0.008), bladeMat);
-    blade.position.y = 0.05;
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.07, 0.008), bladeMat);
+    blade.position.y = 0.042;
     const holder = new THREE.Group();
     holder.add(blade);
     holder.rotation.z = (i / 5) * Math.PI * 2;
     fanBlades.add(holder);
   }
   // نور جلو
-  box(pcTower, 0.015, 0.7, 0.03, 0.225, 0.46, 0.32, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2.6 }));
+  box(pcTower, 0.015, 0.48, 0.028, 0.2, 0.33, 0.366, stdMat(0x101318, { emissive: 0x3fb950, emissiveIntensity: 2.6 }));
 
-  /* — صندلی — */
+  /* — صندلی (جلوتر — نزدیک میز، مثل وقتی که پشت میز نشسته باشی) — */
   const chair = new THREE.Group();
-  chair.position.set(0.35, 0, 1.28);
-  chair.rotation.y = 0.18;
+  chair.position.set(0.42, 0, 0.78);
+  chair.rotation.y = -0.12;
   room.add(chair);
 
   const chairMat = stdMat(0x3a4353, { roughness: 0.75 });
@@ -963,15 +1024,15 @@ export async function createScene(canvas, options = {}) {
   }
   cable([
     new THREE.Vector3(0.32, 1.1, -2.62),
-    new THREE.Vector3(0.5, 0.72, -2.66),
-    new THREE.Vector3(1.2, 0.4, -2.7),
-    new THREE.Vector3(1.5, 0.95, -2.86),
+    new THREE.Vector3(0.5, 0.7, -2.75),
+    new THREE.Vector3(0.85, 0.25, -2.6),
+    new THREE.Vector3(1.0, 0.55, -2.38),
   ]);
   cable([
     new THREE.Vector3(-1.0, 1.0, -2.66),
-    new THREE.Vector3(-0.6, 0.6, -2.72),
-    new THREE.Vector3(0.6, 0.35, -2.78),
-    new THREE.Vector3(1.45, 0.9, -2.88),
+    new THREE.Vector3(-0.55, 0.5, -2.8),
+    new THREE.Vector3(0.5, 0.1, -2.65),
+    new THREE.Vector3(0.95, 0.45, -2.4),
   ]);
 
   /* — ذرات غبار (فقط دسکتاپ) — */

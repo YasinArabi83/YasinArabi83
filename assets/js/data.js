@@ -55,7 +55,7 @@ export const STATS = [
 export const HOTSPOTS = [
   { id: 'hs-about',     dot: '۱', label: 'دربارهٔ من',    section: 'about',     anchor: [-0.05, 1.78, -2.2],  target: 'monitorMain' },
   { id: 'hs-skills',    dot: '۲', label: 'مهارت‌ها',      section: 'skills',    anchor: [0.4, 0.96, -1.84],   target: 'keyboard' },
-  { id: 'hs-experience',dot: '۳', label: 'تجربهٔ کاری',   section: 'experience',anchor: [1.52, 1.16, -2.55],  target: 'pcTower' },
+  { id: 'hs-experience',dot: '۳', label: 'تجربهٔ کاری',   section: 'experience',anchor: [1.26, 0.74, -1.72],  target: 'pcTower' },
   { id: 'hs-projects',  dot: '۴', label: 'پروژه‌ها',      section: 'projects',  anchor: [-1.38, 1.5, -2.32],  target: 'monitorDash' },
   { id: 'hs-education', dot: '۵', label: 'تحصیلات',      section: 'education', anchor: [0.55, 2.68, -3.15],  target: 'bookshelf' },
   { id: 'hs-contact',   dot: '۶', label: 'تماس',          section: 'contact',   anchor: [-0.78, 1.02, -2.05], target: 'mug' },
