@@ -792,10 +792,18 @@ export async function createScene(canvas, options = {}) {
   const mugMat = stdMat(0xa8503c, { roughness: 0.6 });
   const mugBody = cyl(mug, 0.055, 0.05, 0.12, 0, 0.06, 0, mugMat, 22, { cast: true });
   cyl(mug, 0.047, 0.047, 0.008, 0, 0.115, 0, stdMat(0x241a14), 22);
-  const handle = new THREE.Mesh(new THREE.TorusGeometry(0.036, 0.011, 10, 22), mugMat);
-  handle.position.set(0.06, 0.06, 0);
-  handle.rotation.y = Math.PI / 2;
+  /* دستهٔ C شکل — نیم‌حلقه که دو سرش داخل دیوارهٔ فنجان فرو رفته */
+  const handle = new THREE.Mesh(
+    new THREE.TorusGeometry(0.05, 0.015, 10, 26, Math.PI),
+    mugMat
+  );
+  handle.geometry.rotateZ(Math.PI / 2);
+  handle.geometry.rotateY(Math.PI / 2);
+  handle.position.set(0, 0.062, 0.033);
+  handle.castShadow = tier.shadows;
   mug.add(handle);
+  /* فنجان بچرخد تا دسته سمت راستِ تصویر باشد — پشت صندلی گم نمی‌شود */
+  mug.rotation.y = 2.2;
 
   const steamMat = new THREE.MeshBasicMaterial({ color: 0xcfd8dc, transparent: true, opacity: 0.3, depthWrite: false });
   const steam = [0, 1, 2].map((i) => {
