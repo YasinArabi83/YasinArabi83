@@ -141,6 +141,10 @@ export async function createScene(canvas, options = {}) {
   renderer.setClearColor(0x000000, 0);
   renderer.shadowMap.enabled = tier.shadows;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // صحنه ایستا است (سایه‌اندازها حرکت نمی‌کنند) — نقشهٔ سایه فقط یک‌بار ساخته می‌شود؛
+  // حذف یک پاس رندر کامل در هر فریم = چرخش بسیار روان‌تر
+  renderer.shadowMap.autoUpdate = false;
+  renderer.shadowMap.needsUpdate = true;
 
   const scene = new THREE.Scene();
   const wrap = canvas.parentElement;
@@ -331,7 +335,7 @@ export async function createScene(canvas, options = {}) {
   const ide = makeCanvas(1024, 680);
   const ideTex = new THREE.CanvasTexture(ide.c);
   ideTex.colorSpace = THREE.SRGBColorSpace;
-  const ideState = { chars: 0, blink: 0, pause: 0 };
+  const ideState = { chars: 0, blinkOn: true, pause: 0 };
 
   function totalCharsUpTo(lineIdx, partial) {
     let n = 0;
@@ -394,7 +398,7 @@ export async function createScene(canvas, options = {}) {
       }
       if (drawn >= visible && i < CODE_LINES.length - 1 && shown < full) {
         // مکان‌نما
-        if (Math.floor(ideState.blink / 8) % 2 === 0) {
+        if (ideState.blinkOn) {
           ctx.fillStyle = '#7ee787';
           ctx.fillRect(x + 2, y - 18, 9, 21);
         }
@@ -456,7 +460,7 @@ export async function createScene(canvas, options = {}) {
       }
       y += lineH;
     }
-    if (termState.done && Math.floor(ideState.blink / 8) % 2 === 0) {
+    if (termState.done && ideState.blinkOn) {
       ctx.fillStyle = '#7ee787';
       ctx.fillRect(44, y - 20, 11, 24);
     }
@@ -632,8 +636,13 @@ export async function createScene(canvas, options = {}) {
   desk.add(monitorMain);
 
   const bezelMat = stdMat(0x232a36, { roughness: 0.55, metalness: 0.25 });
-  box(monitorMain, 0.56, 0.03, 0.34, 0, 0.015, 0.02, bezelMat, { cast: true });
-  box(monitorMain, 0.09, 0.44, 0.06, 0, 0.24, -0.02, bezelMat, { cast: true });
+  /* پایهٔ سه‌لایه: کف دولایه روی میز + ستون از پشتِ کف تا پشتِ پنل + صفحهٔ اتصال VESA.
+     ستون پشتِ پنل است (مثل مانیتور واقعی) و به صفحه چسبیده — نه داخلش */
+  const standMatA = stdMat(0x1d232e, { roughness: 0.5, metalness: 0.3 });
+  box(monitorMain, 0.52, 0.022, 0.3, 0, 0.011, 0.045, standMatA, { cast: true });
+  box(monitorMain, 0.36, 0.016, 0.2, 0, 0.028, 0.038, standMatA);
+  box(monitorMain, 0.078, 0.38, 0.05, 0, 0.215, -0.076, standMatA, { cast: true });
+  box(monitorMain, 0.17, 0.15, 0.032, 0, 0.41, -0.073, standMatA);
   box(monitorMain, 1.08, 0.66, 0.055, 0, 0.62, -0.03, bezelMat, { cast: true });
   box(monitorMain, 1.08, 0.07, 0.04, 0, 0.31, -0.005, stdMat(0x0d1117));
   const mainScreen = new THREE.Mesh(
@@ -665,9 +674,13 @@ export async function createScene(canvas, options = {}) {
   monitorDash.rotation.y = 0.42;
   desk.add(monitorDash);
 
-  box(monitorDash, 0.44, 0.03, 0.28, 0, 0.015, 0.02, bezelMat, { cast: true });
-  box(monitorDash, 0.07, 0.36, 0.05, 0, 0.2, -0.02, bezelMat, { cast: true });
-  box(monitorDash, 0.84, 0.54, 0.05, 0, 0.5, -0.03, bezelMat, { cast: true });
+  const bezelMatB = stdMat(0x232a36, { roughness: 0.55, metalness: 0.25 });
+  const standMatB = stdMat(0x1d232e, { roughness: 0.5, metalness: 0.3 });
+  box(monitorDash, 0.42, 0.02, 0.26, 0, 0.01, 0.04, standMatB, { cast: true });
+  box(monitorDash, 0.29, 0.015, 0.17, 0, 0.023, 0.033, standMatB);
+  box(monitorDash, 0.064, 0.29, 0.042, 0, 0.175, -0.066, standMatB, { cast: true });
+  box(monitorDash, 0.14, 0.12, 0.028, 0, 0.33, -0.064, standMatB);
+  box(monitorDash, 0.84, 0.54, 0.05, 0, 0.5, -0.03, bezelMatB, { cast: true });
   const dashScreen = new THREE.Mesh(
     new THREE.PlaneGeometry(0.77, 0.47),
     new THREE.MeshStandardMaterial({
@@ -1081,10 +1094,10 @@ export async function createScene(canvas, options = {}) {
           if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) { covered = true; break; }
         }
       }
-      if (covered) { hs.el.style.display = 'none'; continue; }
-      hs.el.style.display = '';
-      hs.el.style.left = `${x}px`;
-      hs.el.style.top = `${y}px`;
+      if (covered) { if (hs.el.style.display !== 'none') hs.el.style.display = 'none'; continue; }
+      if (hs.el.style.display === 'none') hs.el.style.display = '';
+      /* transform به‌جای left/top — بدون layout مجدد در هر فریم (روان‌تر) */
+      hs.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%)`;
     }
   }
 
@@ -1110,14 +1123,20 @@ export async function createScene(canvas, options = {}) {
     hoverTarget = group;
     canvas.classList.toggle('pointing', !!group);
     if (group) {
+      /* هاور: قطعات نورانی روشن‌تر می‌شوند و بدنه فقط ته‌رنگ سبز خیلی ملایم می‌گیرد
+         (قبلاً کل جسم سبز می‌شد — مخصوصاً کیس کامپیوتر زشت بود) */
       group.traverse((o) => {
         if (o.isMesh && o.material && o.material.emissive) {
           if (o.userData.baseEmissive === undefined) {
             o.userData.baseEmissive = o.material.emissiveIntensity;
             o.userData.baseEmissiveHex = o.material.emissive.getHex();
           }
-          o.material.emissiveIntensity = Math.max(o.userData.baseEmissive, 0.3);
-          if (o.userData.baseEmissiveHex === 0x000000) o.material.emissive.setHex(0x1e5f2e);
+          if (o.userData.baseEmissiveHex !== 0) {
+            o.material.emissiveIntensity = Math.min(o.userData.baseEmissive * 1.4 + 0.15, 4);
+          } else {
+            o.material.emissive.setHex(0x14361f);
+            o.material.emissiveIntensity = 0.28;
+          }
         }
       });
     }
@@ -1158,9 +1177,16 @@ export async function createScene(canvas, options = {}) {
     wrap && wrap.classList.remove('dragging');
     restAz = targetAz;
     const dist = Math.hypot(e.clientX - downX, e.clientY - downY);
-    if (dist < 7 && hoverTarget) {
-      const hs = HOTSPOTS.find((h) => h.target === hoverTarget.name);
-      if (hs) onNavigate(hs.section);
+    if (dist < 7) {
+      /* انتخاب تازه از محل رهاکردن — برای تاچ (که pointermove ندارد) هم درست کار می‌کند */
+      const rect = canvas.getBoundingClientRect();
+      ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const hit = pickInteractive();
+      if (hit) {
+        const hs = HOTSPOTS.find((h) => h.target === hit.name);
+        if (hs) onNavigate(hs.section);
+      }
     }
   }
 
@@ -1170,12 +1196,17 @@ export async function createScene(canvas, options = {}) {
   canvas.addEventListener('pointercancel', onPointerUp);
   canvas.addEventListener('pointerleave', () => { ndc.set(-2, -2); parallax.tx = 0; parallax.ty = 0; setHover(null); });
 
-  function updateRaycast() {
-    if (ndc.x < -1.5) { setHover(null); return; }
+  function pickInteractive() {
     raycaster.setFromCamera(ndc, camera);
     const hits = raycaster.intersectObjects(interactive, true);
-    if (hits.length) setHover(hits[0].object.userData.hsRoot || null);
-    else setHover(null);
+    return hits.length ? (hits[0].object.userData.hsRoot || null) : null;
+  }
+
+  /* هنگام درگ (چرخش صحنه) هاور غیرفعال است — نمی‌خواهیم وسط چرخش،
+     عبور موس از روی کیس کل جسم را سبز کند */
+  function updateRaycast() {
+    if (dragging || ndc.x < -1.5) { setHover(null); return; }
+    setHover(pickInteractive());
   }
 
   /* ===== حلقهٔ انیمیشن ===== */
@@ -1184,6 +1215,11 @@ export async function createScene(canvas, options = {}) {
   let rafId = 0;
   let active = true;
   let lastIde = 0, lastTerm = 0, lastDash = 0;
+
+  /* کیفیت تطبیقی: اگر سخت‌افزار کند بود رزولوشن رندر پله‌ای پایین می‌آید تا چرخش روان بماند */
+  const dprSteps = [tier.maxDPR, 1.5, 1.25, 1.0];
+  let dprLevel = 0;
+  let perfAcc = 0, perfN = 0, prevPerfNow = 0;
 
   drawIDE();
   drawTerm();
@@ -1205,8 +1241,10 @@ export async function createScene(canvas, options = {}) {
     parallax.y = lerp(parallax.y, reducedMotion ? 0 : parallax.ty, 1 - Math.exp(-4 * dt));
     applyCamera();
 
-    // صفحه‌ها
-    ideState.blink += 1;
+    // صفحه‌ها — بوم فقط وقتی بازکشیده می‌شود که محتوا یا چشمکِ مکان‌نما عوض شده باشد
+    // (قبلاً IDE با بوم 1024×680 در هر فریم بازکشیده و آپلود می‌شد — گران‌ترین بخش)
+    const blinkOn = !reducedMotion && Math.floor(now / 530) % 2 === 0;
+    let ideDirty = false;
     if (!reducedMotion) {
       if (now - lastIde > 100) {
         lastIde = now;
@@ -1218,9 +1256,11 @@ export async function createScene(canvas, options = {}) {
           ideState.chars += 3;
           if (ideState.chars >= full) { ideState.chars = full; ideState.pause = 150; }
         }
+        ideDirty = true;
       }
-      if (now - lastTerm > 110) { lastTerm = now; stepTerm(); drawTerm(); }
-      if (now - lastDash > 500) { lastDash = now; drawDash(t); }
+      // فقط صفحهٔ نمایان روی مانیتور دوم بازکشیده می‌شود
+      if (now - lastTerm > 110 && termScreen.visible) { lastTerm = now; stepTerm(); drawTerm(); }
+      if (now - lastDash > 500 && dashScreen.visible) { lastDash = now; drawDash(t); }
       // جابه‌جایی داشبورد/ترمینال روی مانیتور دوم
       swapTimer -= dt;
       if (swapTimer <= -0.35) {
@@ -1228,12 +1268,16 @@ export async function createScene(canvas, options = {}) {
         dashScreen.visible = !showTerm;
         termScreen.visible = showTerm;
         swapTimer = 15;
+        if (showTerm) drawTerm(); else drawDash(t);
       } else if (swapTimer <= 0) {
         dashScreen.visible = false;
         termScreen.visible = false;
       }
     }
-    drawIDE();
+    if (ideDirty || blinkOn !== ideState.blinkOn) {
+      ideState.blinkOn = blinkOn;
+      drawIDE();
+    }
     screenLight.intensity = 5.0 + Math.sin(t * 6.7) * 0.25 + Math.sin(t * 13.1) * 0.12;
 
     // فن
@@ -1265,6 +1309,21 @@ export async function createScene(canvas, options = {}) {
     updateRaycast();
     updateHotspots();
     renderer.render(scene, camera);
+
+    // سنجش کارایی — میانگین فاصلهٔ فریم‌ها؛ اگر کند بود یک پله رزولوشن کم می‌کنیم
+    if (prevPerfNow > 0 && now - prevPerfNow < 500) {
+      perfAcc += now - prevPerfNow;
+      perfN++;
+      if (perfN >= 40) {
+        const avgMs = perfAcc / perfN;
+        perfAcc = 0; perfN = 0;
+        if (avgMs > 23 && dprLevel < dprSteps.length - 1) {
+          dprLevel++;
+          resize();
+        }
+      }
+    }
+    prevPerfNow = now;
   }
 
   /* ===== اندازه و دید ===== */
@@ -1276,7 +1335,7 @@ export async function createScene(canvas, options = {}) {
     camera.aspect = w / h;
     camera.fov = camera.aspect < 0.85 ? 52 : 40;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tier.maxDPR));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprSteps[dprLevel]));
     renderer.setSize(w, h, false);
   }
 

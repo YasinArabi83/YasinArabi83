@@ -452,7 +452,10 @@ body.menu-open { overflow: hidden; }
 }
 .hotspot {
   position: absolute;
+  left: 0;
+  top: 0;
   transform: translate(-50%, -50%);
+  will-change: transform;
   display: flex;
   align-items: center;
   gap: 7px;
